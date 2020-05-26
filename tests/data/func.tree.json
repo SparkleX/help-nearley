@@ -1,5 +1,6 @@
 {
 	"left": {
+		"type": "function",
 		"left": {
 			"left": 4,
 			"oper": "-",
@@ -9,6 +10,7 @@
 	},
 	"oper": "+",
 	"right": {
+		"type": "function",
 		"left": {
 			"left": 5,
 			"oper": "*",

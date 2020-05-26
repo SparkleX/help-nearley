@@ -21,7 +21,7 @@ describe("Expression Test", () => {
 			var inputText = fs.readFileSync(inFile, "utf8");
 			const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
 			parser.feed(inputText);
-			console.debug(JSON.stringify(parser.results[0]));
+			console.debug(JSON.stringify(parser.results[0])+"\r\n");
 			chai.expect(parser.results[0]).to.deep.equals(outJson);
 		}
     });

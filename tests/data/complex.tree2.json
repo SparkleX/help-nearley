@@ -24,6 +24,18 @@
 			"oper": "()"
 		}
 	},
-	"trueExpr": 100,
-	"falseExpr": 200
+	"trueExpr": {
+		"type": "function",
+		"left": {
+			"left": 1,
+			"oper": "+",
+			"right": {
+				"left": 1,
+				"oper": "*",
+				"right": "2"
+			}
+		},
+		"oper": "abs"
+	},
+	"falseExpr": -500
 }

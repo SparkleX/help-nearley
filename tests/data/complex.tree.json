@@ -1,27 +1,22 @@
 {
 	"type": "if",
-	"operator": {
-		"type": "boolean_expression",
-		"operator": "and",
+	"condition": {
+		"oper": "and",
 		"left": {
-			"type": "comparison_expression",
-			"operator": ">",
+			"oper": ">",
 			"left": 1,
 			"right": 2
 		},
 		"right": {
 			"left": {
-				"type": "boolean_expression",
-				"operator": "or",
+				"oper": "or",
 				"left": {
-					"type": "comparison_expression",
-					"operator": "<=",
+					"oper": "<=",
 					"left": 3,
 					"right": 4
 				},
 				"right": {
-					"type": "comparison_expression",
-					"operator": ">",
+					"oper": ">",
 					"left": 5,
 					"right": 6
 				}
@@ -29,7 +24,8 @@
 			"oper": "()"
 		}
 	},
-	"left": {
+	"trueExpr": {
+		"type": "function",
 		"left": {
 			"left": 1,
 			"oper": "+",
@@ -41,5 +37,5 @@
 		},
 		"oper": "abs"
 	},
-	"right": -500
+	"falseExpr": -500
 }

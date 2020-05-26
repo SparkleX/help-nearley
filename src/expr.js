@@ -125,51 +125,43 @@ var grammar = {
         },
     {"name": "main", "symbols": ["arith_expr"], "postprocess": id},
     {"name": "main$string$1", "symbols": [{"literal":"i"}, {"literal":"f"}], "postprocess": function joiner(d) {return d.join('');}},
-    {"name": "main$string$2", "symbols": [{"literal":"t"}, {"literal":"h"}, {"literal":"e"}, {"literal":"n"}], "postprocess": function joiner(d) {return d.join('');}},
-    {"name": "main$string$3", "symbols": [{"literal":"e"}, {"literal":"l"}, {"literal":"s"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
-    {"name": "main", "symbols": ["main$string$1", "_", {"literal":"("}, "_", "boolean_expression", "_", {"literal":","}, "_", "main$string$2", "_", "arith_expr", "_", {"literal":","}, "_", "main$string$3", "_", "arith_expr", "_", {"literal":")"}], "postprocess": 
+    {"name": "main", "symbols": ["main$string$1", "_", {"literal":"("}, "_", "boolean_expression", "_", {"literal":","}, "_", "arith_expr", "_", {"literal":","}, "_", "arith_expr", "_", {"literal":")"}], "postprocess": 
         d => ({
             type: "if",
             condition: d[4],
-            trueExpr: d[10],
-            falseExpr: d[16]
+            trueExpr: d[8],
+            falseExpr: d[12]
         })
                 },
-    {"name": "boolean_expression", "symbols": ["comparison_expression"], "postprocess": id},
-    {"name": "boolean_expression", "symbols": ["comparison_expression", "_", "boolean_operator", "_", "boolean_expression"], "postprocess": 
+    {"name": "boolean_expression", "symbols": ["or_expression"], "postprocess": id},
+    {"name": "boolean_expression", "symbols": ["par_boolean_expression"]},
+    {"name": "par_boolean_expression", "symbols": [{"literal":"("}, "_", "boolean_expression", "_", {"literal":")"}], "postprocess": d =>({oper:"()", left:d[2]} )},
+    {"name": "and_expression", "symbols": ["comparison_expression"], "postprocess": id},
+    {"name": "and_expression", "symbols": ["par_boolean_expression"], "postprocess": id},
+    {"name": "and_expression$string$1", "symbols": [{"literal":"a"}, {"literal":"n"}, {"literal":"d"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "and_expression", "symbols": ["and_expression", "_", "and_expression$string$1", "_", "and_expression"], "postprocess": function(d) {return {oper:d[2], left: d[0],  right:d[4]}}},
+    {"name": "or_expression", "symbols": ["and_expression"], "postprocess": id},
+    {"name": "or_expression$string$1", "symbols": [{"literal":"o"}, {"literal":"r"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "or_expression", "symbols": ["or_expression", "_", "or_expression$string$1", "_", "and_expression"], "postprocess": function(d) {return {oper:d[2], left: d[0], right:d[4]}}},
+    {"name": "comparison_expression", "symbols": ["arith_expr", "_", "comparison_operator", "_", "arith_expr"], "postprocess": 
         d => ({
-            type: "boolean_expression",
-            operator: d[2],
+            oper: d[2],
             left: d[0],
             right: d[4]
         })
                 },
-    {"name": "boolean_expression", "symbols": [{"literal":"("}, "_", "boolean_expression", "_", {"literal":")"}], "postprocess": d =>({left:d[2], oper:"()"} )},
-    {"name": "comparison_expression", "symbols": ["additive_expression"], "postprocess": id},
-    {"name": "comparison_expression", "symbols": ["additive_expression", "_", "comparison_operator", "_", "comparison_expression"], "postprocess": 
-        d => ({
-            type: "comparison_expression",
-            operator: d[2],
-            left: d[0],
-            right: d[4]
-        })
-                },
-    {"name": "boolean_operator$string$1", "symbols": [{"literal":"a"}, {"literal":"n"}, {"literal":"d"}], "postprocess": function joiner(d) {return d.join('');}},
-    {"name": "boolean_operator", "symbols": ["boolean_operator$string$1"], "postprocess": id},
-    {"name": "boolean_operator$string$2", "symbols": [{"literal":"o"}, {"literal":"r"}], "postprocess": function joiner(d) {return d.join('');}},
-    {"name": "boolean_operator", "symbols": ["boolean_operator$string$2"], "postprocess": id},
     {"name": "arith_expr", "symbols": ["unary_expression"], "postprocess": id},
     {"name": "arith_expr", "symbols": ["additive_expression"], "postprocess": id},
     {"name": "arith_expr", "symbols": ["multiplicative_expression"], "postprocess": id},
-    {"name": "multiplicative_expression", "symbols": ["unary_expression", "_", /[*/]/, "_", "multiplicative_expression"], "postprocess": function(d) {return {left: d[0], oper:d[2], right:d[4]}}},
+    {"name": "multiplicative_expression", "symbols": ["unary_expression", "_", /[*/]/, "_", "multiplicative_expression"], "postprocess": function(d) {return {oper:d[2], left: d[0], right:d[4]}}},
     {"name": "multiplicative_expression", "symbols": ["unary_expression"], "postprocess": id},
     {"name": "additive_expression", "symbols": ["multiplicative_expression"], "postprocess": id},
-    {"name": "additive_expression", "symbols": ["multiplicative_expression", "_", /[+-]/, "_", "additive_expression"], "postprocess": function(d) {return {left: d[0], oper:d[2], right:d[4]}}},
+    {"name": "additive_expression", "symbols": ["multiplicative_expression", "_", /[+-]/, "_", "additive_expression"], "postprocess": function(d) {return {oper:d[2], left: d[0], right:d[4]}}},
     {"name": "unary_expression", "symbols": ["tableColumn"], "postprocess": id},
     {"name": "unary_expression", "symbols": ["int"], "postprocess": id},
     {"name": "unary_expression", "symbols": ["dqstring"], "postprocess": id},
-    {"name": "unary_expression", "symbols": ["identifier", "_", {"literal":"("}, "_", "arith_expr", "_", {"literal":")"}], "postprocess": d =>( {type:"funcion", left:d[4], oper:d[0]} )},
-    {"name": "unary_expression", "symbols": [{"literal":"("}, "_", "arith_expr", "_", {"literal":")"}], "postprocess": d =>({left:d[2], oper:"()"} )},
+    {"name": "unary_expression", "symbols": ["identifier", "_", {"literal":"("}, "_", "arith_expr", "_", {"literal":")"}], "postprocess": d =>( {type:"function", oper:d[0], left:d[4]} )},
+    {"name": "unary_expression", "symbols": [{"literal":"("}, "_", "arith_expr", "_", {"literal":")"}], "postprocess": d =>({oper:"()", left:d[2]} )},
     {"name": "comparison_operator", "symbols": [{"literal":">"}], "postprocess": id},
     {"name": "comparison_operator$string$1", "symbols": [{"literal":">"}, {"literal":"="}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "comparison_operator", "symbols": ["comparison_operator$string$1"], "postprocess": id},

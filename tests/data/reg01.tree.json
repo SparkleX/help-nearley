@@ -1,0 +1,32 @@
+{
+	"type": "if",
+	"condition": {
+	  "oper": "or",
+	  "left": {
+		"left": {
+		  "oper": "and",
+		  "left": {
+			"oper": ">",
+			"left": 3,
+			"right": 1
+		  },
+		  "right": {
+			"oper": "<",
+			"left": 4,
+			"right": 1
+		  }
+		},
+		"oper": "()"
+	  },
+	  "right": {
+		"left": {
+		  "oper": ">",
+		  "left": 1,
+		  "right": 5
+		},
+		"oper": "()"
+	  }
+	},
+	"trueExpr": 100,
+	"falseExpr": 200
+  }

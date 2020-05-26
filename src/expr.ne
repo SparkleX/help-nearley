@@ -4,45 +4,41 @@
 
 main -> 
 	arith_expr {% id %}  
-	|  "if" _ "(" _ boolean_expression _ "," _ "then" _ arith_expr _ "," _ "else" _ arith_expr _ ")"         
+	|  "if" _ "(" _ boolean_expression _ "," _ arith_expr _ "," _ arith_expr _ ")"
 		{%
             d => ({
                 type: "if",
                 condition: d[4],
-                trueExpr: d[10],
-                falseExpr: d[16]
+                trueExpr: d[8],
+                falseExpr: d[12]
             })
         %}
 
 boolean_expression
-    -> comparison_expression     {% id %}
-    |  comparison_expression _ boolean_operator _ boolean_expression
-        {%
-            d => ({
-                type: "boolean_expression",
-                operator: d[2],
-                left: d[0],
-                right: d[4]
-            })
-        %}
-	|	"(" _ boolean_expression _ ")"  {% d =>({left:d[2], oper:"()"} )%}
+    ->  or_expression {% id %}
+	|  par_boolean_expression
 
+par_boolean_expression
+	->	"(" _ boolean_expression _ ")"  {% d =>({oper:"()", left:d[2]} )%}
+
+and_expression ->      
+      comparison_expression {% id %}
+	| par_boolean_expression {% id %}
+	| and_expression _ "and" _ and_expression {% function(d) {return {oper:d[2], left: d[0],  right:d[4]}} %}
+
+or_expression ->
+      and_expression {% id %}
+    | or_expression _ "or" _ and_expression{% function(d) {return {oper:d[2], left: d[0], right:d[4]}} %}
 
 comparison_expression
-    -> additive_expression    {% id %}
-    |  additive_expression _ comparison_operator _ comparison_expression
+    ->  arith_expr _ comparison_operator _ arith_expr
         {%
             d => ({
-                type: "comparison_expression",
-                operator: d[2],
+                oper: d[2],
                 left: d[0],
                 right: d[4]
             })
         %}
-
-boolean_operator
-    -> "and"      {% id %}
-    |  "or"       {% id %}
 
 
 arith_expr -> 
@@ -51,19 +47,19 @@ arith_expr ->
 	| 	multiplicative_expression {% id %}
 
 multiplicative_expression -> 
-      unary_expression _ [*/] _ multiplicative_expression {% function(d) {return {left: d[0], oper:d[2], right:d[4]}} %}
+      unary_expression _ [*/] _ multiplicative_expression {% function(d) {return {oper:d[2], left: d[0], right:d[4]}} %}
     | unary_expression {% id %}
 
 additive_expression -> 
       multiplicative_expression    {% id %}
-    | multiplicative_expression _ [+-] _ additive_expression {% function(d) {return {left: d[0], oper:d[2], right:d[4]}} %}
+    | multiplicative_expression _ [+-] _ additive_expression {% function(d) {return {oper:d[2], left: d[0], right:d[4]}} %}
     
 unary_expression ->
     tableColumn {% id %}
     | int {% id %} 
     | dqstring {% id %} 
-	| identifier _ "(" _ arith_expr _ ")" {% d =>( {type:"funcion", left:d[4], oper:d[0]} )%}   
-    |  "(" _ arith_expr _ ")"  {% d =>({left:d[2], oper:"()"} )%}   
+	| identifier _ "(" _ arith_expr _ ")" {% d =>( {type:"function", oper:d[0], left:d[4]} )%}   
+    |  "(" _ arith_expr _ ")"  {% d =>({oper:"()", left:d[2]} )%}   
 
 comparison_operator
     -> ">"   {% id %}
