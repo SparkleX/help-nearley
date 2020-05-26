@@ -130,9 +130,9 @@ var grammar = {
     {"name": "main", "symbols": ["main$string$1", "_", {"literal":"("}, "_", "boolean_expression", "_", {"literal":","}, "_", "main$string$2", "_", "arith_expr", "_", {"literal":","}, "_", "main$string$3", "_", "arith_expr", "_", {"literal":")"}], "postprocess": 
         d => ({
             type: "if",
-            operator: d[4],
-            left: d[10],
-            right: d[16]
+            condition: d[4],
+            trueExpr: d[10],
+            falseExpr: d[16]
         })
                 },
     {"name": "boolean_expression", "symbols": ["comparison_expression"], "postprocess": id},
@@ -168,7 +168,7 @@ var grammar = {
     {"name": "unary_expression", "symbols": ["tableColumn"], "postprocess": id},
     {"name": "unary_expression", "symbols": ["int"], "postprocess": id},
     {"name": "unary_expression", "symbols": ["dqstring"], "postprocess": id},
-    {"name": "unary_expression", "symbols": ["identifier", "_", {"literal":"("}, "_", "arith_expr", "_", {"literal":")"}], "postprocess": d =>({left:d[4], oper:d[0]} )},
+    {"name": "unary_expression", "symbols": ["identifier", "_", {"literal":"("}, "_", "arith_expr", "_", {"literal":")"}], "postprocess": d =>( {type:"funcion", left:d[4], oper:d[0]} )},
     {"name": "unary_expression", "symbols": [{"literal":"("}, "_", "arith_expr", "_", {"literal":")"}], "postprocess": d =>({left:d[2], oper:"()"} )},
     {"name": "comparison_operator", "symbols": [{"literal":">"}], "postprocess": id},
     {"name": "comparison_operator$string$1", "symbols": [{"literal":">"}, {"literal":"="}], "postprocess": function joiner(d) {return d.join('');}},

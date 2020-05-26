@@ -8,9 +8,9 @@ main ->
 		{%
             d => ({
                 type: "if",
-                operator: d[4],
-                left: d[10],
-                right: d[16]
+                condition: d[4],
+                trueExpr: d[10],
+                falseExpr: d[16]
             })
         %}
 
@@ -62,7 +62,7 @@ unary_expression ->
     tableColumn {% id %}
     | int {% id %} 
     | dqstring {% id %} 
-	| identifier _ "(" _ arith_expr _ ")" {% d =>({left:d[4], oper:d[0]} )%}   
+	| identifier _ "(" _ arith_expr _ ")" {% d =>( {type:"funcion", left:d[4], oper:d[0]} )%}   
     |  "(" _ arith_expr _ ")"  {% d =>({left:d[2], oper:"()"} )%}   
 
 comparison_operator

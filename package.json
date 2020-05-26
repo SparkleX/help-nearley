@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "nearleyc src/expr.ne -o src/expr.js && ts-node src/main.ts",
-		"build": "webpack",
+		"build": "nearleyc src/expr.ne -o src/expr.js && webpack",
 		"test": "mocha -r ts-node/register tests/*.spec.ts"
 	},
 	"author": "",
@@ -25,6 +25,7 @@
 		"mocha": "^7.2.0",
 		"ts-node": "^8.6.2",
 		"typescript": "^3.7.5",
-		"webpack": "^4.43.0"
+		"webpack": "^4.43.0",
+		"webpack-cli": "^3.3.11"
 	}
 }
