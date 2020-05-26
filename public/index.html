@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test</title>
+	<script type="text/javascript" src="buddle.js"></script>
+	<script>
+		function test() {
+			try {
+				var out = parser.parse(idText.value);
+				idTree.value = JSON.stringify(out, null, 2);
+			}catch(err) {
+				idTree.value = `Error character '${err.token.value}' at ${err.offset}`;
+			}
+		}
+	</script>
+</head>
+<body>
+
+<h3>Expression:</h3>
+<textarea id="idText" rows = "5" cols = "60" onkeyup="test()">(1+2)</textarea>
+<p></p>
+<button type="Parse" value="test" onclick="test()">Test</button>
+<h3>Tree:</h3>
+<textarea id="idTree" rows = "25" cols = "60"></textarea>
+</body>
+</html>
