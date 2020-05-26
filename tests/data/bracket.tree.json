@@ -1,0 +1,26 @@
+{
+	"left": {
+		"left": {
+			"left": 1,
+			"oper": "+",
+			"right": 2
+		},
+		"oper": "()"
+	},
+	"oper": "*",
+	"right": {
+		"left": {
+			"left": 3,
+			"oper": "+",
+			"right": {
+				"left": {
+					"left": 4,
+					"oper": "-",
+					"right": 5
+				},
+				"oper": "()"
+			}
+		},
+		"oper": "()"
+	}
+}

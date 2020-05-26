@@ -1,0 +1,19 @@
+{
+	"left": {
+		"left": {
+			"left": 4,
+			"oper": "-",
+			"right": 1
+		},
+		"oper": "abs"
+	},
+	"oper": "+",
+	"right": {
+		"left": {
+			"left": 5,
+			"oper": "*",
+			"right": 8
+		},
+		"oper": "div0"
+	}
+}

@@ -1,4 +1,4 @@
-// Generated automatically by nearley, version 2.19.1
+// Generated automatically by nearley, version 2.19.3
 // http://github.com/Hardmath123/nearley
 (function () {
 function id(x) { return x[0]; }
@@ -117,14 +117,24 @@ var grammar = {
     {"name": "sstrchar", "symbols": [{"literal":"\\"}, "strescape"], "postprocess": function(d) { return JSON.parse("\""+d.join("")+"\""); }},
     {"name": "sstrchar$string$1", "symbols": [{"literal":"\\"}, {"literal":"'"}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "sstrchar", "symbols": ["sstrchar$string$1"], "postprocess": function(d) {return "'"; }},
-    {"name": "strescape", "symbols": [/["\\\/bfnrt]/], "postprocess": id},
+    {"name": "strescape", "symbols": [/["\\/bfnrt]/], "postprocess": id},
     {"name": "strescape", "symbols": [{"literal":"u"}, /[a-fA-F0-9]/, /[a-fA-F0-9]/, /[a-fA-F0-9]/, /[a-fA-F0-9]/], "postprocess": 
         function(d) {
             return d.join("");
         }
         },
-    {"name": "main", "symbols": ["expression"], "postprocess": id},
-    {"name": "expression", "symbols": ["boolean_expression"], "postprocess": id},
+    {"name": "main", "symbols": ["arith_expr"], "postprocess": id},
+    {"name": "main$string$1", "symbols": [{"literal":"i"}, {"literal":"f"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "main$string$2", "symbols": [{"literal":"t"}, {"literal":"h"}, {"literal":"e"}, {"literal":"n"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "main$string$3", "symbols": [{"literal":"e"}, {"literal":"l"}, {"literal":"s"}, {"literal":"e"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "main", "symbols": ["main$string$1", "_", {"literal":"("}, "_", "boolean_expression", "_", {"literal":","}, "_", "main$string$2", "_", "arith_expr", "_", {"literal":","}, "_", "main$string$3", "_", "arith_expr", "_", {"literal":")"}], "postprocess": 
+        d => ({
+            type: "if",
+            operator: d[4],
+            left: d[10],
+            right: d[16]
+        })
+                },
     {"name": "boolean_expression", "symbols": ["comparison_expression"], "postprocess": id},
     {"name": "boolean_expression", "symbols": ["comparison_expression", "_", "boolean_operator", "_", "boolean_expression"], "postprocess": 
         d => ({
@@ -134,6 +144,7 @@ var grammar = {
             right: d[4]
         })
                 },
+    {"name": "boolean_expression", "symbols": [{"literal":"("}, "_", "boolean_expression", "_", {"literal":")"}], "postprocess": d =>({left:d[2], oper:"()"} )},
     {"name": "comparison_expression", "symbols": ["additive_expression"], "postprocess": id},
     {"name": "comparison_expression", "symbols": ["additive_expression", "_", "comparison_operator", "_", "comparison_expression"], "postprocess": 
         d => ({
@@ -147,14 +158,18 @@ var grammar = {
     {"name": "boolean_operator", "symbols": ["boolean_operator$string$1"], "postprocess": id},
     {"name": "boolean_operator$string$2", "symbols": [{"literal":"o"}, {"literal":"r"}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "boolean_operator", "symbols": ["boolean_operator$string$2"], "postprocess": id},
-    {"name": "multiplicative_expression", "symbols": ["unary_expression", "_", /[*\/]/, "_", "multiplicative_expression"], "postprocess": function(d) {return {left: d[0], oper:d[2], right:d[4]}}},
+    {"name": "arith_expr", "symbols": ["unary_expression"], "postprocess": id},
+    {"name": "arith_expr", "symbols": ["additive_expression"], "postprocess": id},
+    {"name": "arith_expr", "symbols": ["multiplicative_expression"], "postprocess": id},
+    {"name": "multiplicative_expression", "symbols": ["unary_expression", "_", /[*/]/, "_", "multiplicative_expression"], "postprocess": function(d) {return {left: d[0], oper:d[2], right:d[4]}}},
     {"name": "multiplicative_expression", "symbols": ["unary_expression"], "postprocess": id},
     {"name": "additive_expression", "symbols": ["multiplicative_expression"], "postprocess": id},
     {"name": "additive_expression", "symbols": ["multiplicative_expression", "_", /[+-]/, "_", "additive_expression"], "postprocess": function(d) {return {left: d[0], oper:d[2], right:d[4]}}},
     {"name": "unary_expression", "symbols": ["tableColumn"], "postprocess": id},
     {"name": "unary_expression", "symbols": ["int"], "postprocess": id},
     {"name": "unary_expression", "symbols": ["dqstring"], "postprocess": id},
-    {"name": "unary_expression", "symbols": [{"literal":"("}, "_", "expression", "_", {"literal":")"}], "postprocess": d =>({left:d[2], oper:"()"} )},
+    {"name": "unary_expression", "symbols": ["identifier", "_", {"literal":"("}, "_", "arith_expr", "_", {"literal":")"}], "postprocess": d =>({left:d[4], oper:d[0]} )},
+    {"name": "unary_expression", "symbols": [{"literal":"("}, "_", "arith_expr", "_", {"literal":")"}], "postprocess": d =>({left:d[2], oper:"()"} )},
     {"name": "comparison_operator", "symbols": [{"literal":">"}], "postprocess": id},
     {"name": "comparison_operator$string$1", "symbols": [{"literal":">"}, {"literal":"="}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "comparison_operator", "symbols": ["comparison_operator$string$1"], "postprocess": id},
@@ -163,7 +178,12 @@ var grammar = {
     {"name": "comparison_operator", "symbols": ["comparison_operator$string$2"], "postprocess": id},
     {"name": "comparison_operator$string$3", "symbols": [{"literal":"="}, {"literal":"="}], "postprocess": function joiner(d) {return d.join('');}},
     {"name": "comparison_operator", "symbols": ["comparison_operator$string$3"], "postprocess": id},
-    {"name": "tableColumn", "symbols": ["identifier", {"literal":"."}, "identifier"], "postprocess": d=>({type:"column", table:d[0], column:d[2]})},
+    {"name": "comparison_operator$string$4", "symbols": [{"literal":"<"}, {"literal":">"}], "postprocess": function joiner(d) {return d.join('');}},
+    {"name": "comparison_operator", "symbols": ["comparison_operator$string$4"], "postprocess": id},
+    {"name": "tableColumn$ebnf$1", "symbols": []},
+    {"name": "tableColumn$ebnf$1$subexpression$1", "symbols": [{"literal":"["}, "_", "identifier", "_", {"literal":"]"}, {"literal":"."}]},
+    {"name": "tableColumn$ebnf$1", "symbols": ["tableColumn$ebnf$1", "tableColumn$ebnf$1$subexpression$1"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
+    {"name": "tableColumn", "symbols": ["tableColumn$ebnf$1", {"literal":"["}, "_", "identifier", "_", {"literal":"]"}], "postprocess": d =>(d.join().replace(/[\[,\]]/g, ''))},
     {"name": "identifier$ebnf$1", "symbols": [/[a-zA-Z0-9]/]},
     {"name": "identifier$ebnf$1", "symbols": ["identifier$ebnf$1", /[a-zA-Z0-9]/], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
     {"name": "identifier", "symbols": [/[a-zA-Z]/, "identifier$ebnf$1"], "postprocess": d=>(d[0] + d[1].join(""))}

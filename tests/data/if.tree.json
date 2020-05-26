@@ -1,0 +1,11 @@
+{
+	"type": "if",
+	"operator": {
+		"type": "comparison_expression",
+		"operator": ">",
+		"left": 1,
+		"right": 2
+	},
+	"left": 100,
+	"right": 200
+}

@@ -1,20 +1,28 @@
 {
-  "name": "help-nearley",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "nearleyc expr.ne -o expr.js & ts-node main.ts"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@types/nearley": "^2.11.1",
-    "nearley": "^2.19.1"
-  },
-  "devDependencies": {
-    "@types/node": "^13.7.1",
-    "ts-node": "^8.6.2",
-    "typescript": "^3.7.5"
-  }
+	"name": "help-nearley",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "nearleyc src/expr.ne -o src/expr.js && ts-node src/main.ts",
+		"test": "mocha -r ts-node/register tests/*.spec.ts"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@types/nearley": "^2.11.1",
+		"jsonfile": "^6.0.1",
+		"nearley": "^2.19.1",
+		"save": "^2.4.0"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^7.0.2",
+		"@types/node": "^13.7.1",
+		"chai": "^4.2.0",
+		"glob": "^7.1.6",
+		"mocha": "^7.2.0",
+		"ts-node": "^8.6.2",
+		"typescript": "^3.7.5"
+	}
 }

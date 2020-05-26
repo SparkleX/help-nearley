@@ -1,0 +1,21 @@
+{
+	"left": 1,
+	"oper": "+",
+	"right": {
+		"left": {
+			"left": 2,
+			"oper": "*",
+			"right": 3
+		},
+		"oper": "-",
+		"right": {
+			"left": {
+				"left": 5,
+				"oper": "/",
+				"right": 6
+			},
+			"oper": "+",
+			"right": "Table.Attr1.Attr2"
+		}
+	}
+}
